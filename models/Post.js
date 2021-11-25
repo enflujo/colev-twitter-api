@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
+
 const PostSchema = mongoose.Schema({
   date_time: {
     type: Date,
-    default: Date.now
+    default: null
   },
   confirmed: {
     type: Number,
@@ -16,6 +17,6 @@ const PostSchema = mongoose.Schema({
     type: String,
     require: true
   },
-})
+}, {collection: 'forecast_cases'})
 
-module.exports = mongoose.model('Posts', PostSchema)
+module.exports = PostSchema
