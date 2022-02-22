@@ -6,7 +6,7 @@ const entradaSchema = new Schema(
       type: String
     },
     created_at: {
-      type: String
+      type: Date
     },
     text: {
       type: String
