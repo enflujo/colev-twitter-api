@@ -3,274 +3,274 @@ const { Schema } = require('mongoose');
 const entradaSchema = new Schema(
   {
     id: {
-      type: String
+      type: Number,
     },
     created_at: {
-      type: Date
+      type: Date,
     },
     text: {
-      type: String
+      type: String,
     },
     attachments_media: {
-      type: String
+      type: String,
     },
     attachments_media_keys: {
-      type: String
+      type: Number,
     },
     attachments_poll_duration_minutes: {
-      type: String
+      type: Number,
     },
     attachments_poll_end_datetime: {
-      type: String
+      type: Date,
     },
     attachments_poll_id: {
-      type: String
+      type: Number,
     },
     attachments_poll_options: {
-      type: String
+      type: String,
     },
     attachments_poll_voting_status: {
-      type: String
+      type: String,
     },
     attachments_poll_ids: {
-      type: String
+      type: Number,
     },
     author_id: {
-      type: String
+      type: Number,
     },
     author_created_at: {
-      type: String
+      type: Date,
     },
     author_username: {
-      type: String
+      type: String,
     },
     author_name: {
-      type: String
+      type: String,
     },
     author_description: {
-      type: String
+      type: String,
     },
     author_entities_description_cashtags: {
-      type: String
+      type: String,
     },
     author_entities_description_hashtags: {
-      type: String
+      type: String,
     },
     author_entities_description_mentions: {
-      type: String
+      type: String,
     },
     author_entities_description_urls: {
-      type: String
+      type: String,
     },
     author_entities_url_urls: {
-      type: String
+      type: String,
     },
     author_location: {
-      type: String
+      type: String,
     },
     author_pinned_tweet_id: {
-      type: String
+      type: Number,
     },
     author_profile_image_url: {
-      type: String
+      type: String,
     },
     author_protected: {
-      type: String
+      type: Boolean,
     },
     author_public_metrics_followers_count: {
-      type: String
+      type: Number,
     },
     author_public_metrics_following_count: {
-      type: String
+      type: Number,
     },
     author_public_metrics_listed_count: {
-      type: String
+      type: Number,
     },
     author_public_metrics_tweet_count: {
-      type: String
+      type: Number,
     },
     author_url: {
-      type: String
+      type: String,
     },
     author_verified: {
-      type: String
+      type: Boolean,
     },
     author_withheld_scope: {
-      type: String
+      type: String,
     },
     author_withheld_copyright: {
-      type: String
+      type: String,
     },
     author_withheld_country_codes: {
-      type: String
+      type: String,
     },
     author__id: {
-      type: String
+      type: Number,
     },
     context_annotations: {
-      type: String
+      type: String,
     },
     conversation_id: {
-      type: String
+      type: Number,
     },
     entities_annotations: {
-      type: String
+      type: String,
     },
     entities_cashtags: {
-      type: String
+      type: String,
     },
     entities_hashtags: {
-      type: String
+      type: String,
     },
     entities_mentions: {
-      type: String
+      type: String,
     },
     entities_urls: {
-      type: String
+      type: String,
     },
     geo_coordinates_coordinates: {
-      type: String
+      type: String,
     },
     geo_coordinates_type: {
-      type: String
+      type: String,
     },
     geo_country: {
-      type: String
+      type: String,
     },
     geo_country_code: {
-      type: String
+      type: String,
     },
     geo_full_name: {
-      type: String
+      type: String,
     },
     geo_geo_bbox: {
-      type: String
+      type: Number,
     },
     geo_geo_type: {
-      type: String
+      type: String,
     },
     geo_id: {
-      type: String
+      type: Number,
     },
     geo_name: {
-      type: String
+      type: String,
     },
     geo_place_id: {
-      type: String
+      type: Number,
     },
     geo_place_type: {
-      type: String
+      type: String,
     },
     in_reply_to_user_id: {
-      type: String
+      type: String,
     },
     in_reply_to_user_created_at: {
-      type: String
+      type: Date,
     },
     in_reply_to_user_username: {
-      type: String
+      type: String,
     },
     in_reply_to_user_name: {
-      type: String
+      type: String,
     },
     in_reply_to_user_description: {
-      type: String
+      type: String,
     },
     in_reply_to_user_entities_description_cashtags: {
-      type: String
+      type: String,
     },
     in_reply_to_user_entities_description_hashtags: {
-      type: String
+      type: String,
     },
     in_reply_to_user_entities_description_mentions: {
-      type: String
+      type: String,
     },
     in_reply_to_user_entities_description_urls: {
-      type: String
+      type: String,
     },
     in_reply_to_user_entities_url_urls: {
-      type: String
+      type: String,
     },
     in_reply_to_user_location: {
-      type: String
+      type: String,
     },
     in_reply_to_user_pinned_tweet_id: {
-      type: String
+      type: String,
     },
     in_reply_to_user_profile_image_url: {
-      type: String
+      type: String,
     },
     in_reply_to_user_protected: {
-      type: String
+      type: String,
     },
     in_reply_to_user_public_metrics_followers_count: {
-      type: String
+      type: String,
     },
     in_reply_to_user_public_metrics_following_count: {
-      type: String
+      type: String,
     },
     in_reply_to_user_public_metrics_listed_count: {
-      type: String
+      type: String,
     },
     in_reply_to_user_public_metrics_tweet_count: {
-      type: String
+      type: String,
     },
     in_reply_to_user_url: {
-      type: String
+      type: String,
     },
     in_reply_to_user_verified: {
-      type: String
+      type: String,
     },
     in_reply_to_user_withheld_scope: {
-      type: String
+      type: String,
     },
     in_reply_to_user_withheld_copyright: {
-      type: String
+      type: String,
     },
     in_reply_to_user_withheld_country_codes: {
-      type: String
+      type: String,
     },
     in_reply_to_user_id: {
-      type: String
+      type: String,
     },
     lang: {
-      type: String
+      type: String,
     },
     possibly_sensitive: {
-      type: String
+      type: Boolean,
     },
     public_metrics_like_count: {
-      type: String
+      type: Number,
     },
     public_metrics_quote_count: {
-      type: String
+      type: Number,
     },
     public_metrics_reply_count: {
-      type: String
+      type: Number,
     },
     public_metrics_retweet_count: {
-      type: String
+      type: Number,
     },
     referenced_tweets: {
-      type: String
+      type: String,
     },
     reply_settings: {
-      type: String
+      type: String,
     },
     source: {
-      type: String
+      type: String,
     },
     withheld_scope: {
-      type: String
+      type: String,
     },
     withheld_copyright: {
-      type: String
+      type: String,
     },
     withheld_country_codes: {
-      type: String
+      type: String,
     },
     type: {
-      type: String
+      type: String,
     },
   },
   { collection: 'tweets' }

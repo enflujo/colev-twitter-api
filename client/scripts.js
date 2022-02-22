@@ -6,15 +6,16 @@ socket.on('connect', () => {
   console.log('Connected to server...');
 });
 
-const res = fetch('http://localhost:3000/prueba')
-  .then((res) => {
-    return res.json();
-  })
-  .then((data) => {
-    console.log(data);
-  });
+// const res = fetch('http://localhost:3000/prueba')
+//   .then((res) => {
+//     return res.json();
+//   })
+//   .then((data) => {
+//     console.log(data);
+//   });
 
 socket.on('tweet', (tweet) => {
+  console.log(tweet);
   const tweetData = {
     id: tweet.data.id,
     text: tweet.data.text,
@@ -25,6 +26,7 @@ socket.on('tweet', (tweet) => {
     reply: tweet.data.public_metrics.reply_count,
     quote: tweet.data.public_metrics.quote_count,
   };
+  // console.log(tweetData);
 
   // const tweetEl = document.createElement('div')
   tweetStream.className = 'card my-4';
@@ -33,10 +35,7 @@ socket.on('tweet', (tweet) => {
     tweetStream.innerHTML = `
         <div class='card-body'>
           <img src=${tweetData.image}>
-        </div>  
-        
-
-      `;
+        </div>`;
   }
 
   // tweetStream.appendChild(tweetEl)
