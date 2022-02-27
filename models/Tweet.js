@@ -273,7 +273,7 @@ const entradaSchema = new Schema(
       type: String,
     },
   },
-  { collection: 'tweets' }
+  { collection: 'tweets2' }
 );
 
 module.exports = entradaSchema;
