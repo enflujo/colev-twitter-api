@@ -2,7 +2,7 @@ version: "3.8"
 services:
   mongodb:
     image: mongo
-    container_name: mongodb
+    container_name: twitter-api-mongodb
     environment:
       - PUID=1000
       - PGID=1000
@@ -10,5 +10,25 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASS}
     volumes:
       - ./database:/data/db
+    networks:
+      - twitter-api
     ports:
       - 27017:27017
+
+  mongo-express:
+    container_name: twitter-api-mongoexpress
+    image: mongo-express
+    restart: unless-stopped
+    networks:
+      - twitter-api
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongodb
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USER}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASS}
+      ME_CONFIG_MONGODB_SERVER: mongodb
+
+networks:
+  twitter-api:
