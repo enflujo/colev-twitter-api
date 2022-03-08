@@ -1,8 +1,7 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-// const { MONGO_USER, MONGO_PASS } = process.env;
-// const MONGODB_URI = `mongodb://${MONGO_USER}:${MONGO_PASS}@localhost:27017`;
-const MONGODB_URI = process.env.MONGODB_URI;//Conexión local Hugo
+const { MONGO_USER, MONGO_PASS } = process.env;
+const MONGODB_URI = `mongodb://${MONGO_USER}:${MONGO_PASS}@localhost:27017`;
 const mc = mongoose.connection;
 const entradaSchema = require('../models/Tweet');
 const http = require('http');
@@ -12,6 +11,12 @@ const socketIo = require('socket.io');
 const needle = require('needle');
 const TOKEN = process.env.TWITTER_BEARER_TOKEN;
 const Port = process.env.Port || 3000;
+const palabrasClaves = require('../models/palabrasClaves')
+
+const query = palabrasClaves.covid19.join(' OR ').trim()
+
+console.log(query)
+
 
 const app = express();
 const server = http.createServer(app);
@@ -41,7 +46,7 @@ const streamUrl =
 // const streamUrl =
 //   'https://api.twitter.com/2/tweets/search/stream?tweet.fields=text,created_at,referenced_tweets,attachments,geo,geo.coordinates,context_annotations,withheld,possibly_sensitive,lang,reply_settings,source,conversation_id,public_metrics,entities';
 
-const rules = [{ value: 'happy' }];
+const rules = [{ value: query }];
 
 //Get stream rules
 
