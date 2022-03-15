@@ -1,6 +1,5 @@
-module.exports = {
+export default {
   covid19: [
-    'happy',
     'covid-19',
     'covid 19',
     'covid19',

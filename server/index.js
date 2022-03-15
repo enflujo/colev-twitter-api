@@ -1,22 +1,24 @@
-require('dotenv').config();
-const mongoose = require('mongoose');
+import 'dotenv/config';
+import mongoose from 'mongoose';
+import http from 'http';
+import path from 'path';
+import express from 'express';
+import { Server } from 'socket.io';
+import { ETwitterStreamEvent, TwitterApi } from 'twitter-api-v2';
+import entradaSchema from '../models/Tweet.js';
+import palabrasClaves from '../models/palabrasClaves.js';
+import camposBusqueda from '../models/camposBusqueda.js';
+
 const { MONGO_USER, MONGO_PASS, TWITTER_BEARER_TOKEN: TOKEN } = process.env;
 const MONGODB_URI = `mongodb://${MONGO_USER}:${MONGO_PASS}@localhost:27017`;
 const mc = mongoose.connection;
-const entradaSchema = require('../models/Tweet');
-const http = require('http');
-const path = require('path');
-const express = require('express');
-const socketIo = require('socket.io');
-const needle = require('needle');
 const Port = process.env.Port || 3000;
-const palabrasClaves = require('../models/palabrasClaves');
-const urlBusqueda = require('../models/camposBusqueda');
-const query = palabrasClaves.covid19.join(' OR ').trim();
+
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = new Server(server);
 let collection = mongoose.model('Tweet', entradaSchema);
+const twitter = new TwitterApi(TOKEN);
 
 app.use(express.static('client'));
 
@@ -32,105 +34,8 @@ app.get('/prueba', (req, res) => {
   });
 });
 
-const rulesUrl = 'https://api.twitter.com/2/tweets/search/stream/rules';
-const streamUrl = `https://api.twitter.com/2/tweets/search/stream?${urlBusqueda}`;
-
-const rules = [{ value: query }];
-
-//Get stream rules
-
-async function getRules() {
-  const response = await needle('get', rulesUrl, {
-    headers: {
-      Authorization: `Bearer ${TOKEN}`,
-    },
-  });
-  return response.body;
-}
-
-//Set stream rules
-
-async function setRules() {
-  const data = {
-    add: rules,
-  };
-  const response = await needle('post', rulesUrl, data, {
-    headers: {
-      'content-type': 'application/json',
-      Authorization: `Bearer ${TOKEN}`,
-    },
-  });
-  return response.body;
-}
-
-//Delete stream rules
-
-async function deleteRules(rules) {
-  if (!Array.isArray(rules.data)) {
-    return null;
-  }
-
-  const ids = rules.data.map((rule) => rule.id);
-  const data = {
-    delete: {
-      ids: ids,
-    },
-  };
-  const response = await needle('post', rulesUrl, data, {
-    headers: {
-      'content-type': 'application/json',
-      Authorization: `Bearer ${TOKEN}`,
-    },
-  });
-  return response.body;
-}
-
-function streamTweets() {
-  const stream = needle.get(streamUrl, {
-    headers: {
-      Authorization: `Bearer ${TOKEN}`,
-    },
-  });
-  stream.on('data', (data) => {
-    try {
-      const json = JSON.parse(data);
-      io.emit('tweet', json);
-      collection.insertMany(
-        {
-          text: json.data.text,
-          author_id: json.data.author_id,
-          id: json.data.id,
-          conversation_id: json.data.conversation_id,
-        },
-        (err, result) => {
-          if (err) console.log(err);
-          if (result) {
-            console.log('datos insertados');
-          }
-        }
-      );
-    } catch (error) {}
-  });
-}
-
 io.on('connection', async () => {
   console.log('Client connected...');
-
-  let currentRules;
-
-  try {
-    //Get all stream rules
-    currentRules = await getRules();
-    //delete all stream rules
-    await deleteRules(currentRules);
-    //Set rules based on array above
-    await setRules();
-  } catch (error) {
-    console.error(error);
-    process.exit(1);
-  }
-
-  streamTweets();
 });
 
 server.listen(Port, () => console.log(`Listening on port ${Port}`));
@@ -142,8 +47,53 @@ mongoose.connect(MONGODB_URI, {
   useUnifiedTopology: true,
 });
 
-mc.once('open', (req, res) => {
+mc.once('open', async (req, res) => {
   console.log('database connected to', MONGODB_URI);
+
+  const reglas = await twitter.v2.streamRules();
+  if (reglas.data?.length) {
+    await twitter.v2.updateStreamRules({
+      delete: { ids: reglas.data.map((rule) => rule.id) },
+    });
+  }
+
+  await twitter.v2.updateStreamRules({
+    add: palabrasClaves.covid19.map((palabra) => {
+      return { value: `${palabra} place_country:CO` };
+    }),
+  });
+
+  const flujo = await twitter.v2.searchStream(camposBusqueda);
+  flujo.autoReconnect = true;
+  flujo.on(ETwitterStreamEvent.Data, async (tweet) => {
+    try {
+      io.emit('tweet', tweet);
+      collection.insertMany(
+        {
+          text: tweet.data.text,
+          author_id: tweet.data.author_id,
+          id: tweet.data.id,
+          conversation_id: tweet.data.conversation_id,
+        },
+        (err, result) => {
+          if (err) console.log(err);
+          if (result) {
+            console.log('datos insertados');
+          }
+        }
+      );
+    } catch (error) {
+      throw new Error(error);
+    }
+
+    // TODO: Revisar esta parte del ejemplo, se puede filtrar los que son retweets:
+
+    // Ignore RTs or self-sent tweets
+    // const isARt = tweet.data.referenced_tweets?.some((tweet) => tweet.type === 'retweeted') ?? false;
+    // if (isARt || tweet.data.author_id === meAsUser.id_str) {
+    //   return;
+    // }
+  });
 });
 
 mc.on('error', (err) => {

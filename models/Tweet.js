@@ -1,6 +1,6 @@
-const { Schema } = require('mongoose');
+import mongoose from 'mongoose';
 
-const entradaSchema = new Schema(
+const entradaSchema = new mongoose.Schema(
   {
     id: {
       type: Number,
@@ -276,4 +276,4 @@ const entradaSchema = new Schema(
   { collection: 'tweets2' }
 );
 
-module.exports = entradaSchema;
+export default entradaSchema;
