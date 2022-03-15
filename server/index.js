@@ -1,6 +1,6 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-const { MONGO_USER, MONGO_PASS } = process.env;
+const { MONGO_USER, MONGO_PASS, TWITTER_BEARER_TOKEN: TOKEN } = process.env;
 const MONGODB_URI = `mongodb://${MONGO_USER}:${MONGO_PASS}@localhost:27017`;
 const mc = mongoose.connection;
 const entradaSchema = require('../models/Tweet');
@@ -9,15 +9,10 @@ const path = require('path');
 const express = require('express');
 const socketIo = require('socket.io');
 const needle = require('needle');
-const TOKEN = process.env.TWITTER_BEARER_TOKEN;
 const Port = process.env.Port || 3000;
-const palabrasClaves = require('../models/palabrasClaves')
-
-const query = palabrasClaves.covid19.join(' OR ').trim()
-
-console.log(query)
-
-
+const palabrasClaves = require('../models/palabrasClaves');
+const urlBusqueda = require('../models/camposBusqueda');
+const query = palabrasClaves.covid19.join(' OR ').trim();
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
@@ -38,13 +33,7 @@ app.get('/prueba', (req, res) => {
 });
 
 const rulesUrl = 'https://api.twitter.com/2/tweets/search/stream/rules';
-const streamUrl =
-  'https://api.twitter.com/2/tweets/search/stream?tweet.fields=attachments,author_id,context_annotations,created_at,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,referenced_tweets,source,text,withheld&expansions=referenced_tweets.id,referenced_tweets.id.author_id,author_id,geo.place_id,attachments.media_keys,attachments.poll_ids,entities.mentions.username,in_reply_to_user&media.fields=duration_ms,height,media_key,preview_image_url,public_metrics,type,url,width,alt_text&user.fields=created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,url,username,verified,withheld,public_metrics&place.fields=contained_within,country,country_code,full_name,geo,id,name,place_type&poll.fields=duration_minutes,end_datetime,id,options,voting_status';
-  // 'https://api.twitter.com/2/tweets/search/stream?tweet.fields=id,text,created_at,referenced_tweets,conversation_id&expansions=author_id,author.verified,in_reply_to_user_id,referenced_tweets.id&user.fields=created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,url,username,verified,withheld&expansions=pinned_tweet_id';
-// ?tweet.fields=conversation_id,public_metrics,entities&expansions=author_id,in_reply_to_user_id,referenced_tweets.id,attachments.media_keys&user.fields=name,username,description&media.fields=preview_image_url,url';
-//curl --request GET 'https://api.twitter.com/2/tweets?ids=1136048014974423040&expansions=geo.place_id&place.fields=contained_within,country,country_code,full_name,geo,id,name,place_type'
-// const streamUrl =
-//   'https://api.twitter.com/2/tweets/search/stream?tweet.fields=text,created_at,referenced_tweets,attachments,geo,geo.coordinates,context_annotations,withheld,possibly_sensitive,lang,reply_settings,source,conversation_id,public_metrics,entities';
+const streamUrl = `https://api.twitter.com/2/tweets/search/stream?${urlBusqueda}`;
 
 const rules = [{ value: query }];
 
@@ -111,7 +100,7 @@ function streamTweets() {
           text: json.data.text,
           author_id: json.data.author_id,
           id: json.data.id,
-          conversation_id: json.data.conversation_id
+          conversation_id: json.data.conversation_id,
         },
         (err, result) => {
           if (err) console.log(err);
