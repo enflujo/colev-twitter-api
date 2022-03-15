@@ -1,0 +1,46 @@
+name: Estilo Código
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  ci:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: [16]
+
+    steps:
+      - name: Actualizando código desde repo 🛎
+        uses: actions/checkout@v3.0.0
+
+      - name: Configurando ambiente de NodeJS 🏗
+        uses: actions/setup-node@v3.0.0
+        with:
+          node-version: ${{ matrix.node }}
+          check-latest: true
+
+      - name: Obtener cache de Yarn 🛠
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache node_modules 📦
+        uses: actions/cache@v2.1.7
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Instalando dependencias 👨🏻‍💻
+        run: yarn
+
+      - name: Revisando estilos de código 👀
+        run: yarn lint
