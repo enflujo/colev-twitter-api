@@ -1,18 +1,11 @@
+import { io } from 'socket.io-client';
+
 const tweetStream = document.getElementById('tweetStream');
 const socket = io();
-const tweets = [];
 
 socket.on('connect', () => {
   console.log('Connected to server...');
 });
-
-// const res = fetch('http://localhost:3000/prueba')
-//   .then((res) => {
-//     return res.json();
-//   })
-//   .then((data) => {
-//     console.log(data);
-//   });
 
 socket.on('tweet', (tweet) => {
   console.log(tweet);
@@ -26,9 +19,7 @@ socket.on('tweet', (tweet) => {
     reply: tweet.data.public_metrics.reply_count,
     quote: tweet.data.public_metrics.quote_count,
   };
-  // console.log(tweetData);
 
-  // const tweetEl = document.createElement('div')
   tweetStream.className = 'card my-4';
 
   if (tweetData.image) {
@@ -37,6 +28,4 @@ socket.on('tweet', (tweet) => {
           <img src=${tweetData.image}>
         </div>`;
   }
-
-  // tweetStream.appendChild(tweetEl)
 });
