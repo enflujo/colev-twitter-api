@@ -1,15 +1,6 @@
 import { io } from 'socket.io-client';
+import { calculoMeses } from './utilidades/ayuda-visualizaciones.js';
 
-const tweetStream = document.getElementById('tweetStream');
-const socket = io();
-import { calculoMeses } from './utilidades/ayuda-visualizaciones';
-
-// function calculoMeses(inicio, final) {
-//   let meses = final.getMonth() - inicio.getMonth();
-//   meses -= inicio.getMonth();
-//   meses += final.getMonth();
-//   return meses <= 0 ? 0 : meses;
-// }
 const tweetStream = document.getElementById('tweetStream');
 const socket = io();
 const tweets = [];
@@ -17,7 +8,7 @@ const lienzo = document.getElementById('lienzo');
 const ctx = lienzo.getContext('2d');
 
 async function inicio() {
-  const respuesta = await fetch('./covid19Parte.json');
+  const respuesta = await fetch('./datos/covid19Parte.json');
   let datos = await respuesta.json();
   datos = datos
     .map((tweet) => {
@@ -97,7 +88,8 @@ socket.on('tweet', (tweet) => {
 //// Sistema de coordenadas
 
 async function crearCoordenadas() {
-  const respuesta = await fetch('./covid19Parte.json');
+  // PARA QUE IMPORTAR LOS DATOS DE NUEVO????
+  const respuesta = await fetch('./datos/covid19Parte.json');
   let datos = await respuesta.json();
   console.log(datos);
   const fechaInicial = datos[0].created_at;

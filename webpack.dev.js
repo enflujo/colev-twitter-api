@@ -1,6 +1,7 @@
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import { merge } from 'webpack-merge';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import common from './webpack.common.js';
 import { baseCss } from './webpack.ayudas.js';
 const __filename = fileURLToPath(import.meta.url);
@@ -36,4 +37,9 @@ export default merge(common, {
       },
     ],
   },
+  plugins: [
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: ['**/*', '!datos/**'],
+    }),
+  ],
 });
