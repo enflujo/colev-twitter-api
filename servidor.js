@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
-import * as fs from 'fs';
 import mongoose from 'mongoose';
 import http from 'http';
 import express from 'express';
@@ -54,19 +53,6 @@ mongoose.connect(MONGODB_URI, {
 
 mc.once('open', async (req, res) => {
   console.log('database connected to', MONGODB_URI);
-
-  //JSON Visualizacion
-  // let cadaTweetArrayID = [];
-
-  // fs.readFile('./models/covid19Parte.json', (error, datos) => {
-  //   if (error) throw error;
-  //   let covid19Parte = JSON.parse(datos);
-  //   covid19Parte.forEach(cadaTweet => {
-  //     cadaTweetArrayID.push(cadaTweet.id);
-  //   });
-  //   console.log(cadaTweetArrayID)
-  // })
-  //
 
   const reglas = await twitter.v2.streamRules();
   if (reglas.data?.length) {

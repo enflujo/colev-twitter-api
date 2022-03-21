@@ -2,8 +2,5 @@ node_modules
 .DS_Store
 .env
 database/
-<<<<<<< Updated upstream
 dist/
-=======
 covid19.jsonl
->>>>>>> Stashed changes
