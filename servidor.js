@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
+import * as fs from 'fs';
 import mongoose from 'mongoose';
 import http from 'http';
 import express from 'express';
@@ -54,6 +55,19 @@ mongoose.connect(MONGODB_URI, {
 mc.once('open', async (req, res) => {
   console.log('database connected to', MONGODB_URI);
 
+  //JSON Visualizacion
+  // let cadaTweetArrayID = [];
+
+  // fs.readFile('./models/covid19Parte.json', (error, datos) => {
+  //   if (error) throw error;
+  //   let covid19Parte = JSON.parse(datos);
+  //   covid19Parte.forEach(cadaTweet => {
+  //     cadaTweetArrayID.push(cadaTweet.id);
+  //   });
+  //   console.log(cadaTweetArrayID)
+  // })
+  //
+
   const reglas = await twitter.v2.streamRules();
   if (reglas.data?.length) {
     await twitter.v2.updateStreamRules({
@@ -63,13 +77,18 @@ mc.once('open', async (req, res) => {
 
   await twitter.v2.updateStreamRules({
     add: palabrasClaves.covid19.map((palabra) => {
-      return { value: `${palabra} place_country:CO` };
+      return { value: `(${palabra}) place_country:US` };
     }),
   });
 
   const flujo = await twitter.v2.searchStream(camposBusqueda);
   flujo.autoReconnect = true;
   flujo.on(ETwitterStreamEvent.Data, async (tweet) => {
+    const tweetsIncludes = tweet.includes.tweets;
+    // const elPrimero = tweetsIncludes[0].public_metrics;
+    // tweetsIncludes.forEach(t => {
+    // console.log(t.public_metrics)
+    // })
     try {
       io.emit('tweet', tweet);
       collection.insertMany(

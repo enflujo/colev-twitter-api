@@ -5,17 +5,92 @@ const entradaSchema = new mongoose.Schema(
     id: {
       type: Number,
     },
+    conversation_id: {
+      type: Number,
+    },
+    referenced_tweets_replied_to_id: {
+      type: Number,
+    },
+    referenced_tweets_retweeted_id: {
+      type: Number,
+    },
+    referenced_tweets_quoted_id: {
+      type: Number,
+    },
+    author_id: {
+      type: Number,
+    },
+    in_reply_to_user_id: {
+      type: Number,
+    },
+    retweeted_user_id: {
+      type: Number,
+    },
+    quoted_user_id: {
+      type: Number,
+    },
     created_at: {
       type: Date,
     },
     text: {
       type: String,
     },
+    lang: {
+      type: String,
+    },
+    source: {
+      type: String,
+    },
+    public_metrics_like_count: {
+      type: Number,
+    },
+    public_metrics_quote_count: {
+      type: Number,
+    },
+    public_metrics_reply_count: {
+      type: Number,
+    },
+    public_metrics_retweet_count: {
+      type: Number,
+    },
+    reply_settings: {
+      type: String,
+    },
+    possibly_sensitive: {
+      type: Boolean,
+    },
+    withheld_scope: {
+      type: String,
+    },
+    withheld_copyright: {
+      type: String,
+    },
+    withheld_country_codes: {
+      type: String,
+    },
+    entities_annotations: {
+      type: String,
+    },
+    entities_cashtags: {
+      type: String,
+    },
+    entities_hashtags: {
+      type: String,
+    },
+    entities_mentions: {
+      type: String,
+    },
+    entities_urls: {
+      type: String,
+    },
+    context_annotations: {
+      type: String,
+    },
     attachments_media: {
       type: String,
     },
     attachments_media_keys: {
-      type: Number,
+      type: String,
     },
     attachments_poll_duration_minutes: {
       type: Number,
@@ -33,7 +108,7 @@ const entradaSchema = new mongoose.Schema(
       type: String,
     },
     attachments_poll_ids: {
-      type: Number,
+      type: String,
     },
     author_id: {
       type: Number,
@@ -104,30 +179,6 @@ const entradaSchema = new mongoose.Schema(
     author_withheld_country_codes: {
       type: String,
     },
-    author__id: {
-      type: Number,
-    },
-    context_annotations: {
-      type: String,
-    },
-    conversation_id: {
-      type: Number,
-    },
-    entities_annotations: {
-      type: String,
-    },
-    entities_cashtags: {
-      type: String,
-    },
-    entities_hashtags: {
-      type: String,
-    },
-    entities_mentions: {
-      type: String,
-    },
-    entities_urls: {
-      type: String,
-    },
     geo_coordinates_coordinates: {
       type: String,
     },
@@ -144,132 +195,21 @@ const entradaSchema = new mongoose.Schema(
       type: String,
     },
     geo_geo_bbox: {
-      type: Number,
+      type: String,
     },
     geo_geo_type: {
       type: String,
     },
     geo_id: {
-      type: Number,
+      type: String,
     },
     geo_name: {
       type: String,
     },
     geo_place_id: {
-      type: Number,
+      type: String,
     },
     geo_place_type: {
-      type: String,
-    },
-    in_reply_to_user_id: {
-      type: String,
-    },
-    in_reply_to_user_created_at: {
-      type: Date,
-    },
-    in_reply_to_user_username: {
-      type: String,
-    },
-    in_reply_to_user_name: {
-      type: String,
-    },
-    in_reply_to_user_description: {
-      type: String,
-    },
-    in_reply_to_user_entities_description_cashtags: {
-      type: String,
-    },
-    in_reply_to_user_entities_description_hashtags: {
-      type: String,
-    },
-    in_reply_to_user_entities_description_mentions: {
-      type: String,
-    },
-    in_reply_to_user_entities_description_urls: {
-      type: String,
-    },
-    in_reply_to_user_entities_url_urls: {
-      type: String,
-    },
-    in_reply_to_user_location: {
-      type: String,
-    },
-    in_reply_to_user_pinned_tweet_id: {
-      type: String,
-    },
-    in_reply_to_user_profile_image_url: {
-      type: String,
-    },
-    in_reply_to_user_protected: {
-      type: String,
-    },
-    in_reply_to_user_public_metrics_followers_count: {
-      type: String,
-    },
-    in_reply_to_user_public_metrics_following_count: {
-      type: String,
-    },
-    in_reply_to_user_public_metrics_listed_count: {
-      type: String,
-    },
-    in_reply_to_user_public_metrics_tweet_count: {
-      type: String,
-    },
-    in_reply_to_user_url: {
-      type: String,
-    },
-    in_reply_to_user_verified: {
-      type: String,
-    },
-    in_reply_to_user_withheld_scope: {
-      type: String,
-    },
-    in_reply_to_user_withheld_copyright: {
-      type: String,
-    },
-    in_reply_to_user_withheld_country_codes: {
-      type: String,
-    },
-    in_reply_to_user_id: {
-      type: String,
-    },
-    lang: {
-      type: String,
-    },
-    possibly_sensitive: {
-      type: Boolean,
-    },
-    public_metrics_like_count: {
-      type: Number,
-    },
-    public_metrics_quote_count: {
-      type: Number,
-    },
-    public_metrics_reply_count: {
-      type: Number,
-    },
-    public_metrics_retweet_count: {
-      type: Number,
-    },
-    referenced_tweets: {
-      type: String,
-    },
-    reply_settings: {
-      type: String,
-    },
-    source: {
-      type: String,
-    },
-    withheld_scope: {
-      type: String,
-    },
-    withheld_copyright: {
-      type: String,
-    },
-    withheld_country_codes: {
-      type: String,
-    },
-    type: {
       type: String,
     },
   },

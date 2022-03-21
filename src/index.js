@@ -2,13 +2,75 @@ import { io } from 'socket.io-client';
 
 const tweetStream = document.getElementById('tweetStream');
 const socket = io();
+import { calculoMeses } from './utilidades/ayuda-visualizaciones';
+
+// function calculoMeses(inicio, final) {
+//   let meses = final.getMonth() - inicio.getMonth();
+//   meses -= inicio.getMonth();
+//   meses += final.getMonth();
+//   return meses <= 0 ? 0 : meses;
+// }
+const tweetStream = document.getElementById('tweetStream');
+const socket = io();
+const tweets = [];
+const lienzo = document.getElementById('lienzo');
+const ctx = lienzo.getContext('2d');
+
+async function inicio() {
+  const respuesta = await fetch('./covid19Parte.json');
+  let datos = await respuesta.json();
+  datos = datos
+    .map((tweet) => {
+      tweet.created_at = new Date(tweet.created_at);
+      return tweet;
+    })
+    .sort((a, b) => (a.created_at > b.created_at ? 1 : -1));
+
+  const tiempos = [];
+
+  datos.forEach((tweet, i) => {
+    if (i < datos.length - 1) {
+      const fechaInicio = tweet.created_at;
+      const fechaSiguiente = datos[i + 1].created_at;
+      const diferenciaEnMs = fechaSiguiente - fechaInicio;
+      const diferenciaEnSeg = diferenciaEnMs / 1000;
+      tiempos.push({ i: i, ms: diferenciaEnMs });
+      // console.log(`Del ${i} al ${i + 1} la diferencia es de:`, diferenciaEnSeg);
+    }
+  });
+  let tweetI = 0;
+  const elem = document.querySelector('.jsonData');
+
+  function imprimir() {
+    // console.log(datos[tweetI]);
+    elem.innerHTML = datos[tweetI].created_at.getMonth();
+    tweetI++;
+    buscarTweet();
+  }
+  function buscarTweet() {
+    setTimeout(() => {
+      imprimir();
+      buscarTweet();
+    }, tiempos[tweetI].ms / 1000);
+  }
+  imprimir();
+  crearCoordenadas();
+}
+dimensionPantalla();
+inicio();
+
+//Lienzo
+function dimensionPantalla() {
+  lienzo.width = window.innerWidth / 2;
+  lienzo.heigth = window.innerHeight / 2;
+}
 
 socket.on('connect', () => {
   console.log('Connected to server...');
 });
 
 socket.on('tweet', (tweet) => {
-  console.log(tweet);
+  // console.log(tweet);
   const tweetData = {
     id: tweet.data.id,
     text: tweet.data.text,
@@ -29,3 +91,45 @@ socket.on('tweet', (tweet) => {
         </div>`;
   }
 });
+
+//Visualizacion
+
+//// Sistema de coordenadas
+
+async function crearCoordenadas() {
+  const respuesta = await fetch('./covid19Parte.json');
+  let datos = await respuesta.json();
+  console.log(datos);
+  const fechaInicial = datos[0].created_at;
+  const fechaFinal = datos[10].created_at;
+  console.log(fechaInicial);
+  const tiempoMeses = calculoMeses(fechaInicial, fechaFinal);
+
+  ctx.lineWidth = 1;
+  ctx.font = '25px Arial';
+  ctx.textAlign = 'start';
+  ctx.strokeStyle = '#e9e9e9';
+  ctx.fillStyle = 'black';
+
+  //Eje X
+  for (let i = 0; i <= tiempoMeses; i++) {
+    const x = pasoMes * i + margenIzquierda;
+    const mes = (inicio.getMonth() + i) % 15;
+
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, base);
+    ctx.stroke();
+    ctx.fillText(mesATexto(mes), x - 15, baseTexto);
+  }
+
+  //Eje Y
+  for (let i = 0; i <= pasoCasos * 4; i += pasoCasos) {
+    const y = base - i * proporcionBase;
+    ctx.beginPath();
+    ctx.moveTo(margenIzquierda, y);
+    ctx.lineTo(lienzo.width, y);
+    ctx.stroke();
+    ctx.fillText(i, margenIzquierda - 50, y + 8);
+  }
+}
