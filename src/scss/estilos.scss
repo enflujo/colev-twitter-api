@@ -4,5 +4,12 @@ body {
 }
 
 #lienzo {
-  background-color: black;
+  background-color: white;
+  z-index: 0;
+  position: absolute;
+}
+
+#lienzo2 {
+  z-index: 1;
+  position: absolute;
 }

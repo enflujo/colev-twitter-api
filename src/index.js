@@ -7,75 +7,98 @@ const socket = io();
 const tweets = [];
 const canvas = document.getElementById('lienzo');
 const ctx = canvas.getContext('2d');
-const pasoNumeroTweets = 50;
-const baseFigura = canvas.heigth - canvas.heigth / 5;
-let margenIzquierda = 100;
-const pasohoras = (lienzo.width / tiempohoras) | 0;
-const proporcionBase = 4;
-let fechaInicial;
-let fechaFinal;
-let fechas = [];
-const tiempohoras = fechaInicial - fechaFinal;
-
+const canvas2 = document.getElementById('lienzo2');
+const ctx2 = canvas2.getContext('2d');
+// const duracionHoras = calcularHoras(fechaInicial);
+// const pasoNumeroTweets = 50;
+// const baseFigura = canvas.heigth - canvas.heigth / 5;
+// let margenIzquierda = 100;
+// const pasohoras = (lienzo.width / tiempohoras) | 0;
+// const proporcionBase = 4;
+let fechaInicio;
+let fechaSiguiente;
+let diferenciaEnMs;
+let fechaUltima;
+let tiemposTotalDias;
+let dimensionesCuadricula = 20;
 async function inicio() {
   const respuesta = await fetch('./datos/covid19Parte.json');
   let datos = await respuesta.json();
+  console.log(datos);
   datos = datos
     .map((tweet) => {
       tweet.created_at = new Date(tweet.created_at);
-      fechas.push(tweet.created_at.getHours());
       return tweet;
     })
     .sort((a, b) => (a.created_at > b.created_at ? 1 : -1));
 
   const tiempos = [];
+  console.log(tiempos);
 
   datos.forEach((tweet, i) => {
     if (i < datos.length - 1) {
-      const fechaInicio = tweet.created_at;
-      const fechaSiguiente = datos[i + 1].created_at;
-      const diferenciaEnMs = fechaSiguiente - fechaInicio;
-      fechas.push(tweet.created_at.getHours());
+      fechaInicio = tweet.created_at;
+      fechaSiguiente = datos[i + 1].created_at;
+      diferenciaEnMs = fechaSiguiente - fechaInicio;
+      fechaUltima = tweet.created_at[98];
       const diferenciaEnSeg = diferenciaEnMs / 1000;
+      console.log(`diferencia segundos ${diferenciaEnSeg}`);
       tiempos.push({ i: i, ms: diferenciaEnMs });
       // console.log(`Del ${i} al ${i + 1} la diferencia es de:`, diferenciaEnSeg);
     }
   });
+
+  let primerTiempo;
+  let ultimoTiempo;
+  tiempos.forEach((tiempo) => {
+    primerTiempo = tiempos[0].ms;
+    ultimoTiempo = tiempos[tiempos.length - 1].ms;
+  });
+
+  const tiempoTotalMS = ultimoTiempo - primerTiempo;
+  const tiemposTotalSG = tiempoTotalMS / 1000;
+  const tiemposTotalMN = tiemposTotalSG / 60;
+  const tiemposTotalHoras = tiemposTotalMN / 60;
+  tiemposTotalDias = Math.floor(tiemposTotalHoras / 24);
+  dimensionesCuadricula = Math.floor(canvas.width / tiemposTotalDias);
+  console.log(`dimensiones cuadricula = ${dimensionesCuadricula}`);
+
   let tweetI = 0;
-  const elem = document.querySelector('.jsonData');
+  // const elem = document.querySelector('.jsonData');
 
   function imprimir() {
-    // console.log(datos[tweetI]);
     // elem.innerHTML = datos[tweetI].created_at.getMonth();
     tweetI++;
     buscarTweet();
     pintarCirculos();
-    console.log(`este es tweetI: ${tweetI}`);
-    function pintarCirculos() {
-      const X = canvas.width / tweetI;
-      const Y = canvas.height / 2;
-      const radius = 45;
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = '#FF0000';
-      ctx.beginPath();
-      ctx.arc(X, Y, radius, 0, 2 * Math.PI, false);
-      ctx.stroke();
-    }
   }
   function buscarTweet() {
     setTimeout(() => {
       imprimir();
     }, tiempos[tweetI].ms / 1000);
   }
+  function pintarCirculos() {
+    const X = tweetI * dimensionesCuadricula + dimensionesCuadricula * 2;
+    console.log(`este es X=${X} y este es tweetI ${tweetI}`);
+    const Y = canvas2.height / 2;
+    const radius = 5;
+    ctx2.lineWidth = 3;
+    ctx2.strokeStyle = '#FF0000';
+    ctx2.beginPath();
+    ctx2.arc(X, Y, radius, 0, 2 * Math.PI, false);
+    ctx2.stroke();
+  }
   imprimir();
   buscarTweet();
+  crearCoordenadas();
 }
-
 inicio();
 
 function actualizar() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
+  canvas2.width = window.innerWidth;
+  canvas2.height = window.innerHeight;
 }
 
 window.onresize = actualizar;
@@ -112,40 +135,129 @@ socket.on('tweet', (tweet) => {
 
 //// Sistema de coordenadas
 
-// async function crearCoordenadas() {
-//   pasoNumeroTweets;
-//   console.log(`fechas = ${fechas}`);
-//   fechaInicial = fechas[0];
-//   console.log(`fecha inicial = ${fechaInicial}`);
+let baseEjeX = Math.floor(canvas.height / dimensionesCuadricula) - 5;
+let baseEjeY = 2;
+let puntoInicioEjeX = { number: 1, suffix: '\u03a0' };
+let puntoInicioEjeY = { number: 1, suffix: '' };
 
-//   fechaFinal = fechas[fechas.length - 1];
-//   console.log(`fecha final = ${fechaFinal}`);
+let numeroLineasEjeX = Math.floor(canvas.height / dimensionesCuadricula);
+let numeroLineasEjeY = Math.floor(canvas.width / dimensionesCuadricula);
 
-//   ctx.lineWidth = 1;
-//   ctx.font = '25px Arial';
-//   ctx.textAlign = 'start';
-//   ctx.strokeStyle = '#e9e9e9';
-//   ctx.fillStyle = '#ffffff';
+function crearCoordenadas() {
+  // Pinta las lineas de la reja en el eje X
+  for (let i = 0; i <= tiemposTotalDias; i++) {
+    ctx.beginPath();
+    ctx.lineWidth = 1;
 
-//   //Eje X
-//   for (let i = 0; i <= tiempohoras; i++) {
-//     const x = pasoMes * i + margenIzquierda;
-//     const mes = (inicio.getMonth() + i) % 15;
+    // Si la línea encaja con el resultado se pinta de otro color
+    if (i == baseEjeX) {
+      ctx.strokeStyle = '#000000';
+    } else {
+      ctx.strokeStyle = '#e9e9e9';
+    }
 
-//     ctx.beginPath();
-//     ctx.moveTo(x, 0);
-//     ctx.lineTo(x, baseFigura);
-//     ctx.stroke();
-//     ctx.fillText(mesATexto(mes), x - 15, baseTexto);
-//   }
+    if (i == tiemposTotalDias) {
+      ctx.moveTo(0, dimensionesCuadricula * i);
+      ctx.lineTo(canvas.width, dimensionesCuadricula * i);
+    } else {
+      ctx.moveTo(0, dimensionesCuadricula * i + 0.5);
+      ctx.lineTo(canvas.width, dimensionesCuadricula * i + 0.5);
+    }
+    ctx.stroke();
+  }
 
-//   //Eje Y
-//   for (let i = 0; i <= pasoNumeroTweets * 4; i += pasoNumeroTweets) {
-//     const y = baseFigura - i * proporcionBase;
-//     ctx.beginPath();
-//     ctx.moveTo(margenIzquierda, y);
-//     ctx.lineTo(lienzo.width, y);
-//     ctx.stroke();
-//     ctx.fillText(i, margenIzquierda - 50, y + 8);
-//   }
-// }
+  // Pinta las lineas de la reja en el eje Y
+  for (let i = 0; i <= numeroLineasEjeY; i++) {
+    ctx.beginPath();
+    ctx.lineWidth = 1;
+
+    // Si la línea encaja con el resultado se pinta de otro color
+    if (i == baseEjeY) {
+      ctx.strokeStyle = '#000000';
+    } else {
+      ctx.strokeStyle = '#e9e9e9';
+    }
+
+    if (i == numeroLineasEjeY) {
+      ctx.moveTo(dimensionesCuadricula * i, 0);
+      ctx.lineTo(dimensionesCuadricula * i, canvas.height);
+    } else {
+      ctx.moveTo(dimensionesCuadricula * i + 0.5, 0);
+      ctx.lineTo(dimensionesCuadricula * i + 0.5, canvas.height);
+    }
+    ctx.stroke();
+  }
+
+  // Trasladar a un nuevo origen el eje X y el eje Y.  En este punto el eje Y del canvas es opuesto al eje Y de la grágica. Así, la coordenada y de cada elemento será negativo respecto al actual.
+  ctx.translate(baseEjeY * dimensionesCuadricula, baseEjeX * dimensionesCuadricula);
+
+  // Marcas de verificación a lo largo del eje positivo X
+  for (let i = 1; i < numeroLineasEjeY - baseEjeY; i++) {
+    ctx.beginPath();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = '#000000';
+
+    // Pintar una marca de verificación de 6x de largo (de -3 a 3)
+    ctx.moveTo(dimensionesCuadricula * i + 0.5, -3);
+    ctx.lineTo(dimensionesCuadricula * i + 0.5, 3);
+    ctx.stroke();
+
+    // El valor del texto en este punto
+    ctx.font = '9px Arial';
+    ctx.textAlign = 'start';
+    ctx.fillText(puntoInicioEjeX.number * i + puntoInicioEjeX.suffix, dimensionesCuadricula * i - 2, 15);
+  }
+
+  // Marcas de verificación a lo largo del eje negativo X
+  for (let i = 1; i < baseEjeY; i++) {
+    ctx.beginPath();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = '#000000';
+
+    // Pintar una marca de verificación de 6x de largo (de -3 a 3)
+    ctx.moveTo(-dimensionesCuadricula * i + 0.5, -3);
+    ctx.lineTo(-dimensionesCuadricula * i + 0.5, 3);
+    ctx.stroke();
+
+    // El valor del texto en este punto
+    ctx.font = '9px Arial';
+    ctx.textAlign = 'end';
+    ctx.fillText(-puntoInicioEjeX.number * i + puntoInicioEjeX.suffix, -dimensionesCuadricula * i + 3, 15);
+  }
+
+  // Marcas de verificación a lo largo del eje positivo Y
+  // El eje positivo Y de la gráfica es el eje negativo Y del canvas
+  for (let i = 1; i < tiemposTotalDias - baseEjeX; i++) {
+    ctx.beginPath();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = '#000000';
+
+    // Pintar una marca de verificación de 6x de largo (de -3 a 3)
+    ctx.moveTo(-3, dimensionesCuadricula * i + 0.5);
+    ctx.lineTo(3, dimensionesCuadricula * i + 0.5);
+    ctx.stroke();
+
+    // El valor del texto en este punto
+    ctx.font = '9px Arial';
+    ctx.textAlign = 'start';
+    ctx.fillText(-puntoInicioEjeY.number * i + puntoInicioEjeY.suffix, 8, dimensionesCuadricula * i + 3);
+  }
+
+  // Marcas de verificación a lo largo del eje negativo Y
+  // El eje negativo Y de la gráfica es el eje positivo Y del lienzo
+  for (let i = 1; i < baseEjeX; i++) {
+    ctx.beginPath();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = '#000000';
+
+    // Pintar una marca de verificación de 6x de largo (de -3 a 3)
+    ctx.moveTo(-3, -dimensionesCuadricula * i + 0.5);
+    ctx.lineTo(3, -dimensionesCuadricula * i + 0.5);
+    ctx.stroke();
+
+    // El valor del texto en este punto
+    ctx.font = '9px Arial';
+    ctx.textAlign = 'start';
+    ctx.fillText(puntoInicioEjeY.number * i + puntoInicioEjeY.suffix, 8, -dimensionesCuadricula * i + 3);
+  }
+}
