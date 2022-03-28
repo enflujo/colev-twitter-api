@@ -11,7 +11,7 @@
 # Iniciar contenedores
 docker-compose up
 
-# Instalar docker sin el log
+# Iniciar contenedores sin el log en terminal
 docker-compose up -d
 
 # Apagar contenedores
@@ -42,7 +42,7 @@ npm run dev
 
 Inicia un servidor local para ver la aplicación [http://localhost:3000](http://localhost:3000)
 
-Inicia un servidor local para visualizar los datos guardados en MongoDB [http://localhost:8081/](http://localhost:8081/)
+Inicia un servidor local para visualizar los datos guardados en MongoDB [http://localhost:8081/](http://localhost:8081/). La aplicación funciona con MongoDB + Express para tener una interfaz visual. Es útil para el desarrollo de la aplicación, pero no es necesario en el despliegue final.
 
 ## Licencia
 
