@@ -8,13 +8,13 @@ const entradaSchema = new mongoose.Schema(
     conversation_id: {
       type: Number,
     },
-    referenced_tweets_replied_to_id: {
+    'referenced_tweets.replied_to.id': {
       type: Number,
     },
-    referenced_tweets_retweeted_id: {
+    'referenced_tweets.retweeted.id': {
       type: Number,
     },
-    referenced_tweets_quoted_id: {
+    'referenced_tweets.quoted.id': {
       type: Number,
     },
     author_id: {
@@ -41,175 +41,238 @@ const entradaSchema = new mongoose.Schema(
     source: {
       type: String,
     },
-    public_metrics_like_count: {
+    'public_metrics.like_count': {
       type: Number,
     },
-    public_metrics_quote_count: {
+    'public_metrics.quote_count': {
       type: Number,
     },
-    public_metrics_reply_count: {
+    'public_metrics.reply_count': {
       type: Number,
     },
-    public_metrics_retweet_count: {
+    'public_metrics.retweet_count': {
       type: Number,
     },
     reply_settings: {
       type: String,
     },
-    possibly_sensitive: {
-      type: Boolean,
-    },
-    withheld_scope: {
+    // possibly_sensitive: {
+    //   type: Boolean,
+    // },
+    'withheld.scope': {
       type: String,
     },
-    withheld_copyright: {
+    'withheld.copyright': {
       type: String,
     },
-    withheld_country_codes: {
+    'withheld.country_codes': {
       type: String,
     },
-    entities_annotations: {
+    'entities.annotations': {
       type: String,
     },
-    entities_cashtags: {
+    'entities.cashtags': {
       type: String,
     },
-    entities_hashtags: {
+    'entities.hashtags': {
       type: String,
     },
-    entities_mentions: {
+    'entities.mentions': {
       type: String,
     },
-    entities_urls: {
+    'entities.urls': [
+      {
+        start: {
+          type: Number,
+        },
+        end: {
+          type: Number,
+        },
+        url: {
+          type: String,
+        },
+        expanded_url: {
+          type: String,
+        },
+        display_url: {
+          type: String,
+        },
+      },
+    ],
+    context_annotations: [
+      {
+        domain: {
+          id: {
+            type: String,
+          },
+          name: {
+            type: String,
+          },
+          description: {
+            type: String,
+          },
+        },
+        entity: {
+          id: {
+            type: String,
+          },
+          name: {
+            type: String,
+          },
+        },
+      },
+    ],
+
+    'attachments.media': [
+      {
+        duration_ms: {
+          type: Number,
+        },
+        type: {
+          type: String,
+        },
+        height: {
+          type: Number,
+        },
+        media_key: {
+          type: String,
+        },
+        public_metrics: {
+          view_count: {
+            type: Number,
+          },
+        },
+        preview_image_url: {
+          type: String,
+        },
+        width: {
+          type: Number,
+        },
+      },
+    ],
+
+    'attachments.media_keys': {
       type: String,
     },
-    context_annotations: {
-      type: String,
-    },
-    attachments_media: {
-      type: String,
-    },
-    attachments_media_keys: {
-      type: String,
-    },
-    attachments_poll_duration_minutes: {
+    'attachments.poll.duration_minutes': {
       type: Number,
     },
-    attachments_poll_end_datetime: {
+    'attachments.poll.end_datetime': {
       type: Date,
     },
-    attachments_poll_id: {
+    'attachments.poll.id': {
       type: Number,
     },
-    attachments_poll_options: {
+    'attachments.poll.options': {
       type: String,
     },
-    attachments_poll_voting_status: {
+    'attachments.poll.voting_status': {
       type: String,
     },
-    attachments_poll_ids: {
+    'attachments.poll.ids': {
       type: String,
     },
-    author_id: {
+    'author.id': {
       type: Number,
     },
-    author_created_at: {
+    'author.created_at': {
       type: Date,
     },
-    author_username: {
+    'author.username': {
       type: String,
     },
-    author_name: {
+    'author.name': {
       type: String,
     },
-    author_description: {
+    'author.description': {
       type: String,
     },
-    author_entities_description_cashtags: {
+    'author.entities.description.cashtags': {
       type: String,
     },
-    author_entities_description_hashtags: {
+    'author.entities.description.hashtags': {
       type: String,
     },
-    author_entities_description_mentions: {
+    'author.entities.description.mentions': {
       type: String,
     },
-    author_entities_description_urls: {
+    'author.entities.description.urls': {
       type: String,
     },
-    author_entities_url_urls: {
+    'author.entities.url.urls': {
       type: String,
     },
-    author_location: {
+    'author.location': {
       type: String,
     },
-    author_pinned_tweet_id: {
+    'author.pinned_tweet_id': {
       type: Number,
     },
-    author_profile_image_url: {
+    'author.profile_image_url': {
       type: String,
     },
-    author_protected: {
-      type: Boolean,
+    'author.protected': {
+      type: String,
     },
-    author_public_metrics_followers_count: {
+    'author.public_metrics.followers_count': {
       type: Number,
     },
-    author_public_metrics_following_count: {
+    'author.public_metrics.following_count': {
       type: Number,
     },
-    author_public_metrics_listed_count: {
+    'author.public_metrics.listed_count': {
       type: Number,
     },
-    author_public_metrics_tweet_count: {
+    'author.public_metrics.tweet_count': {
       type: Number,
     },
-    author_url: {
+    'author.url': {
       type: String,
     },
-    author_verified: {
-      type: Boolean,
+    'author.verified': {
+      type: String,
+      // collation: { locale: 'en', strength: 2 },
     },
-    author_withheld_scope: {
+    'author.withheld_scope': {
       type: String,
     },
-    author_withheld_copyright: {
+    'author.withheld_copyright': {
       type: String,
     },
-    author_withheld_country_codes: {
+    'author.withheld_country_codes': {
       type: String,
     },
-    geo_coordinates_coordinates: {
+    'geo.coordinates.coordinates': {
       type: String,
     },
-    geo_coordinates_type: {
+    'geo.coordinates.type': {
       type: String,
     },
-    geo_country: {
+    'geo.country': {
       type: String,
     },
-    geo_country_code: {
+    'geo.country_code': {
       type: String,
     },
-    geo_full_name: {
+    'geo.full_name': {
       type: String,
     },
-    geo_geo_bbox: {
+    'geo.geo.bbox': {
       type: String,
     },
-    geo_geo_type: {
+    'geo.geo.type': {
       type: String,
     },
-    geo_id: {
+    'geo.id': {
       type: String,
     },
-    geo_name: {
+    'geo.name': {
       type: String,
     },
-    geo_place_id: {
+    'geo.place_id': {
       type: String,
     },
-    geo_place_type: {
+    'geo.place_type': {
       type: String,
     },
   },

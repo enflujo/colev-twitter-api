@@ -39,8 +39,11 @@ const espacioMargen = 15.5;
 
 //Función asincrónica, ya que los datos pueden demorarse en llegar. Esta función tare los datos por medio del fetch y los convierte en JSON
 async function inicio() {
-  const respuesta = await fetch('./datos/covid19Parte.json');
-  let datos = await respuesta.json();
+  const res = await fetch('http://localhost:3000/prueba');
+  let datos = await res.json();
+
+  // const respuesta = await fetch('./datos/covid19Parte.json');
+  // let datos = await respuesta.json();
 
   datos = datos //Con esta función map() se revisan cada uno de los datos (o tweets) en el campo created_at de cada tweet para convertirlo a un formato de fecha en Javascript
     .map((tweet) => {
@@ -348,30 +351,48 @@ function crearCoordenadas(yMax) {
 
 // Socket para llamar datos directamente del stream
 
-socket.on('connect', () => {
-  console.log('Connected to server...');
-});
+// socket.on('connect', () => {
+//   console.log('Connected to server...');
+// });
 
-socket.on('tweet', (tweet) => {
-  const tweetData = {
-    id: tweet.data.id,
-    text: tweet.data.text,
-    username: `@${tweet.includes.users[0].username}`,
-    image: tweet.includes.media ? tweet.includes.media[0].url : null,
-    likes: tweet.data.public_metrics.like_count,
-    retweet: tweet.data.public_metrics.retweet_count,
-    reply: tweet.data.public_metrics.reply_count,
-    quote: tweet.data.public_metrics.quote_count,
-  };
+// socket.on('tweet', (tweet) => {
+//   const tweetData = {
+//     id: tweet.data.id,
+// conversation_id: tweet.data.conversation_id
+// referenced_tweets: tweet.data.referenced_tweets
+// author_id: tweet.data.author_id
+// in_reply_to_user_id: tweet.data.in_reply_to_user_id
+// retweeted_user_id: tweet.data.retweeted_user_id
+// quoted_user_id: tweet.data.quoted_user_id
+// created_at: tweet.data.created_at
+//     text: tweet.data.text,
+// lang: tweet.data.lang
+// source: tweet.data.source
+// public_metrics: tweet.data.public_metrics
+// reply_settings: tweet.data.reply_settings
+// withheld: tweet.data.withheld
+// entities: tweet.entities
+// context_annotations: tweet.data.context_annotations
+// attachments: tweet.attachments
+// author: tweet.author
+// geo: tweet.geo
 
-  // tweetStream.className = 'card my-4';
+//     username: `@${tweet.includes.users[0].username}`,
+//     image: tweet.includes.media ? tweet.includes.media[0].url : null,
+//     likes: tweet.data.public_metrics.like_count,
+//     retweet: tweet.data.public_metrics.retweet_count,
+//     reply: tweet.data.public_metrics.reply_count,
+//     quote: tweet.data.public_metrics.quote_count,
+//   };
 
-  // if (tweetData.image) {
-  //   tweetStream.innerHTML = `
-  //       <div class='card-body'>
-  //         <img src=${tweetData.image}>
-  //       </div>`;
-  // }
-});
+// tweetStream.className = 'card my-4';
+
+// if (tweetData.image) {
+//   tweetStream.innerHTML = `
+//       <div class='card-body'>
+//         <img src=${tweetData.image}>
+//       </div>`;
+// }
+// });
 
 inicio();
