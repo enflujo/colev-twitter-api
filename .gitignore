@@ -4,3 +4,7 @@ node_modules
 database/
 dist/
 covid19.jsonl
+docker-compose.yml
+package-lock.json
+package.json
+yarn.lock

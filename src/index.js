@@ -42,6 +42,109 @@ async function inicio() {
   const res = await fetch('http://localhost:3000/prueba');
   let datos = await res.json();
 
+  // Peticiones
+  // function palabrasPeso() {
+  // const normalizarTexto = (textoANormalizar) => {
+  //   textoANormalizar
+  //     .normalizer('NFD')
+  //     .replace(/\p{Diacritic}/gu, '')
+  //     .toLowerCase()
+  //     .trim();
+  // };
+  // const palabrasARemover = ['al', 'el', 'lo', 'te', 'al', 'estas', 'es', 'q'];
+  // const expresionRegular = new RegExp(`\\b${palabrasARemover.join('|')}\\b`, 'gi');
+  // let ocurrencias = {};
+  // const palabrasGuardadas = [];
+  // datos.forEach((llave) => {
+  //   const cadaLlaveTexto = llave.text;
+  //   // const textoNormalizado = normalizarTexto(cadaLlaveTexto);
+  //   const palabras = cadaLlaveTexto.split(' ');
+  //   const fecha = llave.created_at;
+
+  //   palabras.forEach((palabra) => {
+  //     const palabraI = palabrasGuardadas.findIndex((obj) => {
+  //       return obj.palabra === palabra;
+  //     });
+
+  //     if (palabraI >= 0) {
+  //       palabrasGuardadas[palabraI].fechas.push(fecha);
+  //     } else {
+  //       palabrasGuardadas.push({
+  //         palabra: palabra,
+  //         fechas: [fecha],
+  //       });
+  //     }
+  //   });
+  // console.log(palabrasGuardadas);
+
+  //   let pesosPalabrasReconocidas = {};
+  //   let palabrasReconocidas = [];
+  //   palabras.forEach((cadaPalabra) => {
+  //     const palabrasDesechadas = cadaPalabra.match(expresionRegular, palabras);
+  //     if (pesosPalabrasReconocidas[palabras[cadaPalabra]] === undefined) {
+  //       pesosPalabrasReconocidas[palabras[cadaPalabra]] = 1;
+  //     } else {
+  //       palabrasReconocidas[palabras[cadaPalabra]]++;
+  //     }
+  //     if (palabrasDesechadas === null) {
+  //       palabrasReconocidas.push([
+  //         {
+  //           palabraReconocida: cadaPalabra,
+  //           fecha: [fecha],
+  //           peso: palabrasReconocidas[palabras[cadaPalabra]],
+  //         },
+  //       ]);
+  //     }
+  //     console.log(`cada palabra`, palabrasDesechadas, `palabras reconocidas`, palabrasReconocidas);
+  //   });
+  // });
+
+  //   console.log(palabrasGuardadas);
+  // }
+
+  // palabrasPeso();
+
+  // const categoriasDetectadas = Object.keys(apariciones);
+  //   if (!listaCreadaCategorias.some((instancia) => instancia.prediccion === prediccion)) {
+  //     listaCreadaCategorias.push({
+  //       categoriasDetectadas,
+  //     });
+  //   }
+
+  // function detector(prediccion) {
+  //   if (!apariciones.hasOwnProperty(prediccion.class)) {
+  //     const nombreCategoria = prediccion.class;
+  //     apariciones[nombreCategoria] = [];
+  //     const elemento = document.createElement('div');
+  //     elemento.className = 'categoria';
+  //     elemento.innerText = nombreCategoria;
+  //     listaCategorias.appendChild(elemento);
+  //     elemento.onclick = () => {
+  //       console.log(`Apariciones de categoría ${prediccion.class}`, apariciones[nombreCategoria]);
+  //     };
+  //   }
+
+  //   apariciones[prediccion.class].push({
+  //     tiempo: video.currentTime,
+  //     area: prediccion.bbox,
+  //     confianza: prediccion.score,
+  //   });
+  // }
+
+  //   const cadaLlaveFecha = llave.created_at;
+  //   objetoTexto.push({
+  //     textoCrudo: cadaLlaveTexto,
+  //     fecha: cadaLlaveFecha,
+  //   });
+  // });
+  // const campoTextoLimpio = [];
+  // objetoTexto.forEach((texto) => {
+  //   const cadaTextoLimpio = texto.textoCrudo.replace(expresionRegular, ' ');
+  //   campoTextoLimpio.push({
+  //     textoLimpio: cadaTextoLimpio,
+  //     fecha: texto.fecha,
+  //   });
+
   // const respuesta = await fetch('./datos/covid19Parte.json');
   // let datos = await respuesta.json();
 
@@ -58,8 +161,6 @@ async function inicio() {
   totalDias = Math.ceil(diferenciaTotal / (1000 * 60 * 60 * 24));
   totalHoras = Math.ceil(totalDias * 24);
   totalMeses = Math.ceil(totalDias / 12);
-
-  console.log(totalDias, totalMeses, totalHoras);
 
   const datosAgregadosPorDia = [];
   let yMax = 0;
@@ -91,8 +192,6 @@ async function inicio() {
     instanciaDia.tweets.push(d);
   });
 
-  console.log(datosAgregadosPorDia, 'ymax=', yMax);
-
   const tiempos = [];
   let fechaActual;
   datos.forEach((tweet, i) => {
@@ -107,7 +206,6 @@ async function inicio() {
 
   // diferenciaEnDias = Math.floor(diferenciaTotal / (1000 * 3600 * 24));
   // diferenciaEnMeses = Math.floor(diferenciaTotal / (1000 * 3600 * 24));
-  console.log(datos);
   window.onresize = actualizar;
   actualizar(yMax);
 
@@ -221,178 +319,106 @@ function crearCoordenadas(yMax) {
       ctx.lineTo(x + 20, y);
       ctx.stroke();
     }
-
-    console.log('escala tweets=', escalaNumTweets, canvas.height);
   }
-
-  // Pinta las lineas de la reja en el eje X
-  // const fechaFinal = datos[datos.length - 1].created_at;
-  // const fechaUno = datos[0].created_at;
-  // const escalaHoras = escala * 1000 * 60 * 60;
-  // const baseEjeX = Math.floor(canvas.height / escala) - 5; //Determina la posición de la línea central del sistema de coordenadas en el eje X
-  // // const fechaNueva = fechaFinal - tweet.created_at;
-  // // const x = fechaNueva * escala;
-  // console.log(`diferencia total en ms = ${diferenciaTotal}, escala ${escala}, escala horas = ${escalaHoras}`);
-  // for (let i = 0; i <= escalaHoras; i++) {
-  //   ctx.beginPath();
-  //   ctx.lineWidth = 1;
-  //   // Si la línea encaja con el resultado se pinta de otro color
-  //   if (i == escalaHoras + 3) {
-  //     ctx.strokeStyle = '#000000';
-  //   } else {
-  //     ctx.strokeStyle = '#e9e9e9';
-  //   }
-  //   if (i == escalaHoras) {
-  //     ctx.moveTo(0, escalaHoras * i);
-  //     ctx.lineTo(canvas.width, escalaHoras * i);
-  //   } else {
-  //     ctx.moveTo(0, escalaHoras * i + 0.5);
-  //     ctx.lineTo(canvas.width, escalaHoras * i + 0.5);
-  //   }
-  //   ctx.stroke();
-  // }
-  // numeroLineasEjeX = Math.floor(canvas.height / dimensionesCuadriculaDias);
-  // numeroLineasEjeY = Math.floor(canvas.width / escalaHoras);
-  // // Pinta las lineas de la reja en el eje Y
-  // for (let i = 0; i <= escalaHoras; i++) {
-  //   ctx.beginPath();
-  //   ctx.lineWidth = 1;
-  //   // Si la línea encaja con el resultado se pinta de otro color
-  //   if (i == escalaHoras + 1) {
-  //     ctx.strokeStyle = '#000000';
-  //   } else {
-  //     ctx.strokeStyle = '#e9e9e9';
-  //   }
-  //   if (i == escalaHoras) {
-  //     ctx.moveTo(escalaHoras * i, 0);
-  //     ctx.lineTo(escalaHoras * i, canvas.height);
-  //   } else {
-  //     ctx.moveTo(escalaHoras * i + 0.5, 0);
-  //     ctx.lineTo(escalaHoras * i + 0.5, canvas.height);
-  //   }
-  //   ctx.stroke();
-  // }
-  // // Trasladar a un nuevo origen el eje X y el eje Y.  En este punto el eje Y del canvas es opuesto al eje Y de la gráfica. Así, la coordenada Y de cada elemento será negativo respecto al actual.
-  // ctx.translate(baseEjeY * dimensionesCuadriculaDias, baseEjeX * dimensionesCuadriculaDias);
-  // const fecha = new Date(fechaInicio);
-  // let fechaActual = fecha;
-  // // Marcas de verificación a lo largo del eje positivo X
-  // for (let i = 0; i < diferenciaEnDias; i++) {
-  //   ctx.beginPath();
-  //   ctx.lineWidth = 1;
-  //   const diaActual = fecha.setDate(fecha.getDate() + 1);
-  //   // Pintar una marca de verificación de 6x de largo (de -3 a 3)
-  //   if (new Date(diaActual).getDate() === 1) {
-  //     ctx.lineWidth = 5;
-  //     ctx.strokeStyle = '#ff0000';
-  //     ctx.moveTo(dimensionesCuadriculaDias * i + 0.5, -10);
-  //     ctx.lineTo(dimensionesCuadriculaDias * i + 0.5, 10);
-  //     ctx.stroke();
-  //     let fechaLetras = fecha.toLocaleDateString('es-CO', {
-  //       month: 'long',
-  //     });
-  //     console.log(`letras mes = ${fechaLetras}`);
-  //     // El valor del texto en este punto
-  //     ctx.font = '9px Arial';
-  //     ctx.textAlign = 'start';
-  //     ctx.fillText(fechaLetras, dimensionesCuadriculaDias * i, 15);
-  //   } else {
-  //     ctx.strokeStyle = '#000000';
-  //     ctx.moveTo(dimensionesCuadriculaDias * i + 0.5, -3);
-  //     ctx.lineTo(dimensionesCuadriculaDias * i + 0.5, 3);
-  //     ctx.stroke();
-  //   }
-  // }
-  // // Marcas de verificación a lo largo del eje negativo X
-  // for (let i = 1; i < baseEjeY; i++) {
-  //   ctx.beginPath();
-  //   ctx.lineWidth = 1;
-  //   ctx.strokeStyle = '#000000';
-  //   // Pintar una marca de verificación de 6x de largo (de -3 a 3)
-  //   ctx.moveTo(-dimensionesCuadriculaDias * i + 0.5, -3);
-  //   ctx.lineTo(-dimensionesCuadriculaDias * i + 0.5, 3);
-  //   ctx.stroke();
-  //   // El valor del texto en este punto
-  //   ctx.font = '9px Arial';
-  //   ctx.textAlign = 'end';
-  //   ctx.fillText(-puntoInicioEjeX.number * i + puntoInicioEjeX.suffix, -dimensionesCuadriculaDias * i + 3, 15);
-  // }
-  // // Marcas de verificación a lo largo del eje positivo Y
-  // // El eje positivo Y de la gráfica es el eje negativo Y del canvas
-  // for (let i = 1; i < diferenciaEnMeses; i++) {
-  //   ctx.beginPath();
-  //   ctx.lineWidth = 1;
-  //   ctx.strokeStyle = '#ff0000';
-  //   // Pintar una marca de verificación de 6x de largo (de -3 a 3)
-  //   ctx.moveTo(-3, dimensionesCuadriculaMeses * i + 0.5);
-  //   ctx.lineTo(3, dimensionesCuadriculaMeses * i + 0.5);
-  //   ctx.stroke();
-  //   // El valor del texto en este punto
-  //   ctx.font = '9px Arial';
-  //   ctx.textAlign = 'start';
-  //   ctx.fillText(-puntoInicioEjeY.number * i + puntoInicioEjeY.suffix, 8, dimensionesCuadriculaMeses * i + 3);
-  // }
-  // // Marcas de verificación a lo largo del eje negativo Y
-  // // El eje negativo Y de la gráfica es el eje positivo Y del lienzo
-  // for (let i = 1; i < baseEjeX; i++) {
-  //   ctx.beginPath();
-  //   ctx.lineWidth = 1;
-  //   ctx.strokeStyle = '#000000';
-  //   // Pintar una marca de verificación de 6x de largo (de -3 a 3)
-  //   ctx.moveTo(-3, -dimensionesCuadriculaDias * i + 0.5);
-  //   ctx.lineTo(3, -dimensionesCuadriculaDias * i + 0.5);
-  //   ctx.stroke();
-  //   // El valor del texto en este punto
-  //   ctx.font = '9px Arial';
-  //   ctx.textAlign = 'start';
-  //   ctx.fillText(puntoInicioEjeY.number * i + puntoInicioEjeY.suffix, 8, -dimensionesCuadriculaDias * i + 3);
-  // }
 }
 
 // Socket para llamar datos directamente del stream
 
-// socket.on('connect', () => {
-//   console.log('Connected to server...');
-// });
+socket.on('connect', () => {
+  console.log('Connected to server...');
+});
 
-// socket.on('tweet', (tweet) => {
-//   const tweetData = {
-//     id: tweet.data.id,
-// conversation_id: tweet.data.conversation_id
-// referenced_tweets: tweet.data.referenced_tweets
-// author_id: tweet.data.author_id
-// in_reply_to_user_id: tweet.data.in_reply_to_user_id
-// retweeted_user_id: tweet.data.retweeted_user_id
-// quoted_user_id: tweet.data.quoted_user_id
-// created_at: tweet.data.created_at
-//     text: tweet.data.text,
-// lang: tweet.data.lang
-// source: tweet.data.source
-// public_metrics: tweet.data.public_metrics
-// reply_settings: tweet.data.reply_settings
-// withheld: tweet.data.withheld
-// entities: tweet.entities
-// context_annotations: tweet.data.context_annotations
-// attachments: tweet.attachments
-// author: tweet.author
-// geo: tweet.geo
+socket.on('tweet', (tweet) => {
+  const tweetData = {
+    // id: tweet.data.id,
+    // conversation_id: tweet.data.conversation_id,
+    // referenced_tweets: [
+    //   {
+    //     id: referenced_tweets.id,
+    //     type: referenced_tweets.type,
+    //   },
+    // ],
+    // author_id: tweet.data.author_id,
+    // in_reply_to_user_id: tweet.data.in_reply_to_user_id,
+    // retweeted_user_id: tweet.data.retweeted_user_id,
+    // quoted_user_id: tweet.data.quoted_user_id,
+    // created_at: tweet.data.created_at,
+    // text: tweet.data.text,
+    // lang: tweet.data.lang,
+    // source: tweet.data.source,
+    // public_metrics: tweet.data.public_metrics,
+    // 'public_metrics.like_count': tweet.data.public_metrics.like_count,
+    // 'public_metrics.quote_count': tweet.data.public_metrics.quote_count,
+    // 'public_metrics.reply_count': tweet.data.public_metrics.reply_count,
+    // 'public_metrics.retweet_count': tweet.data.public_metrics.retweet_count,
+    // reply_settings: tweet.data.reply_settings,
+    // withheld: tweet.data.withheld,
+    // 'entities.annotations': tweet.data.entities.annotations,
+    // 'entities.annotations': tweet.data.entities.annotations,
+    // 'entities.hashtags': tweet.data.entities.hashtags,
+    // 'entities.mentions': tweet.data.entities.mentions,
+    // 'entities.urls': tweet.data.entities.urls,
+    // context_annotations: tweet.data.context_annotations,
+    /**
+     * if (tweet.includes.media) {
+     *   image = tweet.includes.media[0].url
+     * } else {
+     *   image = null
+     * }
+     */
+    // 'attachments.media': tweet.includes.media ? tweet.includes.media[0].url : null,
+    // 'attachments.media_keys': tweet.data.attachments.media_keys,
+    // 'author.id': tweet.includes.users[0].id,
+    // 'author.created_at': tweet.includes.users[0].created_at,
+    // 'author.username': `@${tweet.includes.users[0].username}`,
+    // 'author.name': tweet.includes.users[0].name,
+    // 'author.description': tweet.includes.users[0].description ? tweet.includes.users[0].description : null,
+    // 'author.entities.description.cashtags': tweet.includes.users
+    //   ? tweet.includes.users[0].entities.description.cashtags[0]
+    //   : null,
+    // 'author.entities.description.hashtags': tweet.includes.users
+    // ? tweet.includes.users[0].entities.description.hashtags[0]
+    // : null,
+    // 'author.entities.description.mentions': tweet.includes.users[0].entities.description.mentions[0]
+    //   ? tweet.includes.users[0].entities.description.mentions[0]
+    //   : null,
+    // 'author.entities.description.urls': tweet.includes.users[0].entities.description.urls[0]
+    //   ? tweet.includes.users[0].entities.description.urls[0]
+    //   : null,
+    // 'author.entities.url.urls': tweet.includes.users[0].entities.url.urls[0]
+    //   ? tweet.includes.users[0].entities.url.urls[0]
+    //   : null,
+    // 'author.location': tweet.includes.users[0].location,
+    // 'author.pinned_tweet_id': tweet.includes.users[0].pinned_tweet_id,
+    // 'author.profile_image_url': tweet.includes.users[0].profile_image_url,
+    // 'author.protected': tweet.includes.users[0].protected,
+    // 'author.public_metrics.followers_count': tweet.includes.users[0].public_metrics.followers_count,
+    // 'author.public_metrics.following_count': tweet.includes.users[0].public_metrics.following_count,
+    // 'author.public_metrics.listed_count': tweet.includes.users[0].public_metrics.listed_count,
+    // 'author.public_metrics.tweet_count': tweet.includes.users[0].public_metrics.tweet_count,
+    // 'author.url': tweet.includes.users[0].url,
+    // 'author.verified': tweet.includes.users[0].verified,
+    // 'geo.coordinates.coordinates': tweet.includes.places[0].bbox,
+    // 'geo.coordinates.type': tweet.includes.places[0].type,
+    // 'geo.country': tweet.includes.places[0].country,
+    // 'geo.country_code': tweet.includes.places[0].country_code,
+    // 'geo.full_name': tweet.includes.places[0].full_name,
+    // 'geo.geo.bbox': tweet.includes.places[0].geo.bbox,
+    // 'geo.geo.type': tweet.includes.places[0].geo.type,
+    // 'geo.id': tweet.includes.places[0].id,
+    // 'geo.name': tweet.includes.places[0].name,
+    // 'geo.place_id': tweet.data.geo.place_id,
+    // 'geo.place_type': tweet.includes.places[0].place_type,
+  };
+  console.log(`los tweet del socket desde el index=`, tweet);
+  // tweetStream.className = 'card my-4';
 
-//     username: `@${tweet.includes.users[0].username}`,
-//     image: tweet.includes.media ? tweet.includes.media[0].url : null,
-//     likes: tweet.data.public_metrics.like_count,
-//     retweet: tweet.data.public_metrics.retweet_count,
-//     reply: tweet.data.public_metrics.reply_count,
-//     quote: tweet.data.public_metrics.quote_count,
-//   };
-
-// tweetStream.className = 'card my-4';
-
-// if (tweetData.image) {
-//   tweetStream.innerHTML = `
-//       <div class='card-body'>
-//         <img src=${tweetData.image}>
-//       </div>`;
-// }
-// });
+  // if (tweetData.image) {
+  //   tweetStream.innerHTML = `
+  //     <div class='card-body'>
+  //       <img src=${tweetData.image}>
+  //     </div>`;
+  // }
+});
 
 inicio();
