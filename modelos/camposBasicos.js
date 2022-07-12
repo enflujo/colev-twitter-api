@@ -2,281 +2,125 @@ import mongoose from 'mongoose';
 
 const camposBasicosEsquema = new mongoose.Schema(
   {
-    id: {
-      type: Number,
+    _id: String,
+    text: String,
+    attachments: {
+      poll_ids: [String],
+      media_keys: [String],
     },
-    text: {
-      type: String,
-    },
-    attachments: [
-      {
-        media_keys: {
-          type: [String],
-        },
-        poll_ids: {
-          type: Array,
-        },
-      },
-    ],
-    author_id: {
-      type: Number,
-    },
+    author_id: String,
     context_annotations: [
       {
-        domain: [
-          {
-            id: {
-              type: String,
-            },
-            name: {
-              type: String,
-            },
-            description: {
-              type: String,
-            },
-          },
-        ],
-        entity: [
-          {
-            id: {
-              type: String,
-            },
-            name: {
-              type: String,
-            },
-          },
-        ],
+        domain: {
+          id: String,
+          name: String,
+          description: String,
+        },
+        entity: {
+          id: String,
+          name: String,
+          description: String,
+        },
       },
     ],
-    conversation_id: {
-      type: Number,
+    conversation_id: String,
+    created_at: Date,
+    entities: {
+      annotations: [
+        {
+          start: Number,
+          end: Number,
+          probability: Number,
+          normalized_text: String,
+          type: { type: String },
+        },
+      ],
+      cashtags: [
+        {
+          start: Number,
+          end: Number,
+          tag: String,
+        },
+      ],
+      hashtags: [
+        {
+          start: Number,
+          end: Number,
+          tag: String,
+        },
+      ],
+      mentions: [
+        {
+          start: Number,
+          end: Number,
+          tag: String,
+        },
+      ],
+      urls: [
+        {
+          start: Number,
+          end: Number,
+          url: String,
+          expanded_url: String,
+          display_url: String,
+          status: Number,
+          title: String,
+          description: String,
+          unwound_url: String,
+        },
+      ],
     },
-    created_at: {
-      type: Date,
+    geo: {
+      coordinates: {
+        type: { type: String },
+        coordinates: [Number, Number],
+      },
+      place_id: String,
     },
-    entities: [
-      {
-        annotations: [
-          {
-            start: {
-              type: Number,
-            },
-            end: {
-              type: Number,
-            },
-            probability: {
-              type: Number,
-            },
-            normalized_text: {
-              type: String,
-            },
-            type: {
-              type: String,
-            },
-          },
-        ],
-        cashtags: [
-          {
-            start: {
-              type: Number,
-            },
-            end: {
-              type: Number,
-            },
-            tag: {
-              type: String,
-            },
-          },
-        ],
-        hashtags: [
-          {
-            start: {
-              type: Number,
-            },
-            end: {
-              type: Number,
-            },
-            tag: {
-              type: String,
-            },
-          },
-        ],
-        mentions: [
-          {
-            start: {
-              type: Number,
-            },
-            end: {
-              type: Number,
-            },
-            tag: {
-              type: String,
-            },
-            id: {
-              type: Number,
-            },
-            username: {
-              type: String,
-            },
-          },
-        ],
-        urls: [
-          {
-            start: {
-              type: Number,
-            },
-            end: {
-              type: Number,
-            },
-            url: {
-              type: String,
-            },
-            expanded_url: {
-              type: String,
-            },
-            display_url: {
-              type: String,
-            },
-            status: {
-              type: Number,
-            },
-            media_key: {
-              type: String,
-            },
-            unwound_url: {
-              type: String,
-            },
-            description: {
-              type: String,
-            },
-          },
-        ],
-      },
-    ],
-    geo: [
-      {
-        type: {
-          type: String,
-        },
-        bbox: [
-          {
-            type: String,
-          },
-        ],
-        properties: {},
-      },
-    ],
-    in_reply_to_user_id: {
-      type: Number,
+    in_reply_to_user_id: String,
+    lang: String,
+    non_public_metrics: {
+      impression_count: Number,
+      url_link_clicks: Number,
+      user_profile_clicks: Number,
     },
-    lang: {
-      type: String,
+    organic_metrics: {
+      impression_count: Number,
+      like_count: Number,
+      reply_count: Number,
+      retweet_count: Number,
+      url_link_clicks: Number,
+      user_profile_clicks: Number,
     },
-    non_public_metrics: [
-      {
-        impression_count: {
-          type: Number,
-        },
-        url_link_clicks: {
-          type: Number,
-        },
-        user_profile_clicks: {
-          type: Number,
-        },
-      },
-    ],
-    organic_metrics: [
-      {
-        impression_count: {
-          type: Number,
-        },
-        like_count: {
-          type: Number,
-        },
-        reply_count: {
-          type: Number,
-        },
-        retweet_count: {
-          type: Number,
-        },
-        url_link_clicks: {
-          type: Number,
-        },
-        user_profile_clicks: {
-          type: Number,
-        },
-      },
-    ],
-    possibly_sensitive: {
-      type: Boolean,
+    possibly_sensitive: Boolean,
+    promoted_metrics: {
+      impression_count: Number,
+      like_count: Number,
+      reply_count: Number,
+      retweet_count: Number,
+      url_link_clicks: Number,
+      user_profile_clicks: Number,
     },
-    promoted_metrics: [
-      {
-        impression_count: {
-          type: Number,
-        },
-        like_count: {
-          type: Number,
-        },
-        reply_count: {
-          type: Number,
-        },
-        retweet_count: {
-          type: Number,
-        },
-        url_link_clicks: {
-          type: Number,
-        },
-        user_profile_clicks: {
-          type: Number,
-        },
-      },
-    ],
-    public_metrics: [
-      {
-        like_count: {
-          type: Number,
-        },
-        quote_count: {
-          type: Number,
-        },
-        reply_count: {
-          type: Number,
-        },
-        retweet_count: {
-          type: Number,
-        },
-      },
-    ],
+
+    public_metrics: {
+      like_count: Number,
+      quote_count: Number,
+      reply_count: Number,
+      retweet_count: Number,
+    },
+
     referenced_tweets: [
       {
-        type: {
-          type: String,
-        },
-        id: {
-          type: Number,
-        },
+        type: { type: String },
+        id: String,
       },
     ],
-    reply_settings: {
-      type: String,
+    reply_settings: String,
+    source: String,
+    withheld: {
+      copyright: Boolean,
+      country_codes: [String],
     },
-    source: {
-      type: String,
-    },
-    withheld: [
-      {
-        scope: {
-          type: String,
-        },
-        copyright: {
-          type: String,
-        },
-        country_codes: {
-          type: String,
-        },
-      },
-    ],
   },
 
   { collection: 'camposBasicos' }
