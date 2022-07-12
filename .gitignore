@@ -8,3 +8,5 @@ docker-compose.yml
 package-lock.json
 package.json
 yarn.lock
+
+*.log
