@@ -1,9 +1,9 @@
 export default {
   covid19: [
-    'happy',
     'covid-19',
     'covid 19',
     'covid19',
+    'covid_19',
     'covid',
     '2019-ncov',
     '2019 ncov',

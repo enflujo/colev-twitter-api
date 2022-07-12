@@ -452,7 +452,7 @@ const entradaSchema = new mongoose.Schema(
       },
     ],
   },
-  { collection: 'tweets2' }
+  { collection: 'tweets' }
 );
 
 export default entradaSchema;
