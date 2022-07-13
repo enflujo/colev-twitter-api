@@ -1,0 +1,27 @@
+html {
+  box-sizing: border-box;
+  height: 100%;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#lienzo {
+  background-color: white;
+  z-index: 0;
+  position: absolute;
+}
+
+#lienzo2 {
+  z-index: 1;
+  position: absolute;
+}
