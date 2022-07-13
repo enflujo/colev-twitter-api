@@ -2,49 +2,47 @@ import mongoose from 'mongoose';
 
 const camposMediosAdjuntosEsquema = new mongoose.Schema(
   {
-    media: [
+    media_key: String,
+    type: {
+      type: String,
+    },
+    url: String,
+    duration_ms: Number,
+    height: Number,
+    non_public_metrics: {
+      playback_0_count: Number,
+      playback_100_count: Number,
+      playback_25_count: Number,
+      playback_50_count: Number,
+      playback_75_count: Number,
+    },
+    organic_metrics: {
+      playback_0_count: Number,
+      playback_100_count: Number,
+      playback_25_count: Number,
+      playback_50_count: Number,
+      playback_75_count: Number,
+      view_count: Number,
+    },
+    preview_image_url: String,
+    promoted_metrics: {
+      playback_0_count: Number,
+      playback_100_count: Number,
+      playback_25_count: Number,
+      playback_50_count: Number,
+      playback_75_count: Number,
+      view_count: Number,
+    },
+    public_metrics: {
+      view_count: Number,
+    },
+    width: Number,
+    alt_text: String,
+    variants: [
       {
-        duration_ms: {
-          type: Number,
-        },
-        type: {
-          type: String,
-        },
-        height: {
-          type: Number,
-        },
-        media_key: {
-          type: String,
-        },
-        public_metrics: [
-          {
-            view_count: {
-              type: Number,
-            },
-          },
-        ],
-        preview_image_url: {
-          type: String,
-        },
-        width: {
-          type: Number,
-        },
-        url: {
-          type: String,
-        },
-        variants: [
-          {
-            bit_rate: {
-              type: Number,
-            },
-            content_type: {
-              type: String,
-            },
-            url: {
-              type: String,
-            },
-          },
-        ],
+        bit_rate: Number,
+        content_type: String,
+        url: String,
       },
     ],
   },

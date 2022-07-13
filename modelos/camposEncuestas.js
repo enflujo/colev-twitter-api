@@ -2,35 +2,17 @@ import mongoose from 'mongoose';
 
 const camposEncuestasEsquema = new mongoose.Schema(
   {
-    poll: [
+    duration_minutes: Number,
+    end_datetime: Date,
+    id: String,
+    options: [
       {
-        duration_minutes: {
-          type: Number,
-        },
-        end_datetime: {
-          type: Date,
-        },
-        id: {
-          type: Number,
-        },
-        options: [
-          {
-            position: {
-              type: Number,
-            },
-            label: {
-              type: String,
-            },
-            votes: {
-              type: Number,
-            },
-          },
-        ],
-        voting_status: {
-          type: String,
-        },
+        position: Number,
+        label: String,
+        votes: Number,
       },
     ],
+    voting_status: String,
   },
   { collection: 'camposEncuestas' }
 );

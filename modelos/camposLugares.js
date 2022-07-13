@@ -2,47 +2,20 @@ import mongoose from 'mongoose';
 
 const camposLugaresEsquema = new mongoose.Schema(
   {
-    geo: [
-      {
-        id: {
-          type: String,
-        },
-        full_name: {
-          type: String,
-        },
-        country_code: {
-          type: String,
-        },
-        geo: [
-          {
-            type: {
-              type: String,
-            },
-            bbox: [
-              {
-                type: String,
-              },
-            ],
-            properties: {},
-          },
-        ],
-        country: {
-          type: String,
-        },
-        id: {
-          type: String,
-        },
-        place_type: {
-          type: String,
-        },
-        name: {
-          type: String,
-        },
-        contained_within: {
-          type: Array,
-        },
+    full_name: String,
+    id: String,
+    contained_within: Array,
+    country: String,
+    country_code: String,
+    geo: {
+      type: {
+        type: String,
       },
-    ],
+      bbox: [Number, Number, Number, Number],
+      properties: Object,
+    },
+    name: String,
+    place_type: String,
   },
   { collection: 'camposLugares' }
 );
