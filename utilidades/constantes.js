@@ -19,17 +19,17 @@ export const cadena = emoji.emojify(':link:');
 export const conector = emoji.emojify(':electric_plug:');
 export const gorila = emoji.emojify(':gorilla:');
 export const chulo = emoji.emojify(':white_check_mark:');
-export const PUERTO = process.env.PUERTO || 3000;
+export const PUERTO = process.env.TALLY_PUERTO || 3000;
 
 const busqueda = palabrasClaves.covid19.join(' OR ');
 /**
  * Fecha en formato ISO 8601
  */
 // Un día antes del inicio de la pandemia (6 de marzo, 2020)
-const fechaInicial = new Date('05 March 2020 00:00 UTC').toISOString();
+export const fechaInicial = new Date('05 March 2020 00:00 UTC').toISOString();
 // Fecha actual menos 10 segundos (Twitter sólo acepta fecha final con 10 segundos de diferencia)
 const hoy = Date.now() - 10 * 1000;
-const fechaFinal = new Date(hoy).toISOString();
+export const fechaFinal = new Date(hoy).toISOString();
 
 export const parametrosBase = {
   query: `(${busqueda}) place_country:CO`,
@@ -46,3 +46,7 @@ export const parametrosBusqueda = {
     'attachments.media_keys,attachments.poll_ids,author_id,entities.mentions.username,geo.place_id,in_reply_to_user_id,referenced_tweets.id,referenced_tweets.id.author_id',
   'media.fields': 'media_key,duration_ms,height,preview_image_url,type,url,width,public_metrics,alt_text,variants',
 };
+
+// 22-02-01 4:25:07
+// 2020-01-15 10:49:15
+// 250954

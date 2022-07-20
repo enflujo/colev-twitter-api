@@ -74,3 +74,7 @@ async function activarFlujo() {
     // });
   });
 }
+
+io.on('connection', async () => {
+  console.log('Client connected...');
+});

@@ -12,11 +12,11 @@ export default merge(common, {
   devtool: 'inline-source-map',
   target: 'web',
   devServer: {
-    static: resolve(__dirname, 'dist'),
+    static: resolve(__dirname, 'publico'),
     devMiddleware: {
       index: true,
       mimeTypes: { phtml: 'text/html' },
-      publicPath: '/dist',
+      publicPath: '/publico',
       serverSideRender: true,
       writeToDisk: true,
     },

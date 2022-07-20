@@ -9,10 +9,9 @@ export default {
     programa: './src/index.js',
   },
   output: {
-    publicPath: '/',
     filename: '[name].[fullhash].js',
     chunkFilename: '[name].[fullhash].js',
-    path: resolve(__dirname, 'dist'),
+    path: resolve(__dirname, 'publico'),
   },
   module: {
     rules: [

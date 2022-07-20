@@ -11,6 +11,9 @@ const instanciaConteo = axios.create({
 export default async () => {
   let contador = 0;
 
+  // Siempre limpiar la página (next_token) al iniciar el llamado de esta ruta.
+  parametrosBase.next_token = null;
+
   console.log(`${gorila} ${logAviso('Contando tweets (este proceso puede ser demorado)')}`);
 
   async function peticion(pagina) {

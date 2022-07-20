@@ -1,12 +1,8 @@
 node_modules
 .DS_Store
 .env
-database/
-dist/
+basededatos/
+publico/
 covid19.jsonl
-docker-compose.yml
-package-lock.json
-package.json
-yarn.lock
 
 *.log
