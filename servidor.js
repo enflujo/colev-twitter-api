@@ -9,7 +9,7 @@ import express from 'express';
 
 import { Server } from 'socket.io';
 import contarTweets from './modulos/contarTweets.js';
-import { conectar } from './modulos/baseDeDatos.js';
+import { colecciones, conectar } from './modulos/baseDeDatos.js';
 import historicos from './modulos/historicos.js';
 import {
   cadena,
@@ -62,6 +62,19 @@ servidor.get('/contar', async () => {
   return { totalTweets, fechaInicial, fechaFinal };
 });
 
+servidor.get('/semana-horas', async () => {
+  return await colecciones.basicos.aggregate([
+    {
+      $project: {
+        year: { $year: '$created_at' },
+        month: { $month: '$created_at' },
+        day: { $dayOfMonth: '$created_at' },
+        hour: { $hour: '$created_at' },
+      },
+    },
+  ]);
+});
+
 // app.use(express.static('dist'));
 
 // app.get('/', (req, res) => {
@@ -78,10 +91,10 @@ servidor.get('/contar', async () => {
 
 // });
 
-// app.get('/historicos', async (peticion, respuesta) => {
-//   // activarFlujo();
-//   await historicos();
-// });
+servidor.get('/historicos', async (peticion, respuesta) => {
+  // activarFlujo();
+  await historicos();
+});
 
 // server.listen(PUERTO, () => {
 //   console.log(`${cadena} ${logCyan('Servidor disponible en:')} ${logAviso.underline(`http://localhost:${PUERTO}`)}`);

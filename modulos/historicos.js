@@ -28,7 +28,10 @@ async function peticion(pagina) {
           },
         }))
       );
-      console.log(respuesta);
+
+      if (data.meta.next_token) {
+        await peticion(meta.next_token);
+      }
     } catch (error) {
       console.log('xxxxxxx', logError(error._message), 'xxxxxxxx');
       console.log(error);
